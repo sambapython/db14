@@ -1,8 +1,11 @@
 {% extends "product/home.html"%}
 {% block content %}
+<h1>Trasaction</h1>
 <form method="post">
 	{% csrf_token %}
-	<input type="text" name="cat_name" value="{{ category.name }}">
-	<input type="submit" name="" value="Submit">
+	{{ form.as_p }}
+	<input type="submit" name="" value="submit">
+
+	
 </form>
 {% endblock %}

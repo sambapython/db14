@@ -16,11 +16,37 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path
 from product.views import homeview
-from product.category import createcategory, updatecategory
+from product.category import createcategory, updatecategory,deletecategory
+from django.views.generic import CreateView, UpdateView, DeleteView
+from product.models import Product,Transaction
+from product.productviews import createproduct, updateproduct, deleteproduct
+from django.conf.urls.static import static
+from django.conf import settings
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("",homeview),
     path("create_category/",createcategory),
     re_path("update_category/(?P<pk>[0-9]+)",updatecategory), #updatecategory(req_ob,pk=3)
+    re_path("delete_category/(?P<pk>[0-9]+)",deletecategory),
+    path("create_product",createproduct),
+    re_path("update_product/(?P<pk>[0-9]+)",updateproduct),
+    re_path("delete_product/(?P<pk>[0-9]+)",deleteproduct),
+    path("create_transaction",CreateView.as_view(
+         model=Transaction,
+         fields = "__all__",
+         success_url="/",
+         )),
+    re_path("update_transaction/(?P<pk>[0-9]+)",UpdateView.as_view(
+        model=Transaction,
+         fields = "__all__",
+         success_url="/",
+        )),
+    re_path("delete_transaction/(?P<pk>[0-9]+)",DeleteView.as_view(
+        model=Transaction,
+        success_url="/",
+        ))
 ]
+
+urlpatterns = urlpatterns+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
